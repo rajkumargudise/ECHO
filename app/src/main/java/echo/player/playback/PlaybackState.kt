@@ -44,6 +44,9 @@ enum class PlaybackError {
     /** The online stream address was refused or has expired. */
     STREAM_UNAVAILABLE,
 
+    /** The computer has no audio output ECHO can use (desktop only). */
+    NO_AUDIO_OUTPUT,
+
     GENERIC,
 }
 

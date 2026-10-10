@@ -4,6 +4,7 @@ import echo.player.domain.folderOf
 import echo.player.domain.groupedByFolder
 import echo.player.domain.model.Playlist
 import echo.player.domain.model.PlaylistEntry
+import echo.player.ui.userMessage
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -184,5 +185,10 @@ class DesktopPlayerTests {
         assertEquals(echo.player.playback.EchoRepeatMode.ALL, player.state.value.repeatMode)
         assertNull(player.state.value.queue.firstOrNull { it.title == "zzz" })
         player.release()
+    }
+
+    @Test
+    fun everyPlaybackProblemHasAReadableMessage() {
+        for (e in echo.player.playback.PlaybackError.entries) assertTrue(e.name, e.userMessage().length > 10)
     }
 }

@@ -7,6 +7,7 @@ fun PlaybackError.userMessage(): String = when (this) {
     PlaybackError.FILE_UNAVAILABLE -> "This file is no longer available."
     PlaybackError.NETWORK -> "Can't reach the online stream. Check your connection."
     PlaybackError.STREAM_UNAVAILABLE -> "This online track is unavailable right now."
+    PlaybackError.NO_AUDIO_OUTPUT -> "No audio output was found. Check your sound device."
     PlaybackError.UNSUPPORTED_OR_CORRUPT,
     PlaybackError.GENERIC,
     -> "Unable to play this track."

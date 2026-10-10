@@ -288,8 +288,11 @@ class DesktopPlayer(private val scope: CoroutineScope) : PlaybackControls {
                 val buffer = (target.frameSize * target.sampleRate / 5f).toInt() // about 0.2 s, so seeks and the visualizer feel immediate
                     .let { it - it % target.frameSize }
                     .coerceAtLeast(target.frameSize * 1024)
-                out = AudioSystem.getSourceDataLine(target)
-                out.open(target, buffer)
+                out = try {
+                    AudioSystem.getSourceDataLine(target).also { it.open(target, buffer) }
+                } catch (e: IllegalArgumentException) {
+                    throw LineUnavailableException(e.message) // no output device at all
+                }
                 line = out
                 AudioSampleTap.configure(target.sampleRate.toInt())
                 if (!paused) out.start()
@@ -327,7 +330,7 @@ class DesktopPlayer(private val scope: CoroutineScope) : PlaybackControls {
             } catch (e: UnsupportedAudioFileException) {
                 if (!cancelled) sessionFailed(gen, PlaybackError.UNSUPPORTED_OR_CORRUPT)
             } catch (e: LineUnavailableException) {
-                if (!cancelled) sessionFailed(gen, PlaybackError.GENERIC)
+                if (!cancelled) sessionFailed(gen, PlaybackError.NO_AUDIO_OUTPUT)
             } catch (e: Exception) {
                 if (!cancelled) sessionFailed(gen, if (e is java.io.IOException) PlaybackError.UNSUPPORTED_OR_CORRUPT else PlaybackError.GENERIC)
             } finally {
