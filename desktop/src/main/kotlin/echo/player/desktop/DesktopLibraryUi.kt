@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -70,6 +71,7 @@ import echo.player.ui.library.PlaylistNameDialog
 import echo.player.ui.library.ScanningState
 import echo.player.ui.library.SortBar
 import echo.player.ui.library.TrackSections
+import kotlinx.coroutines.delay
 
 /** The five groupings of one list of tracks, each built the first time its tab is shown. */
 private class LibrarySections(private val tracks: List<Track>) {
@@ -93,6 +95,8 @@ private fun Centered(content: @Composable () -> Unit) {
 @Composable
 fun DesktopLibrary(app: DesktopApp) {
     val playback by app.player.state.collectAsState()
+    // A confirmation such as "Added to Road trip" is shown for a few seconds, then goes away.
+    LaunchedEffect(app.message) { if (app.message != null) { delay(3500); app.message = null } }
     var showCreate by remember { mutableStateOf(false) }
     var renameTarget by remember { mutableStateOf<Playlist?>(null) }
 
@@ -209,10 +213,10 @@ fun DesktopLibrary(app: DesktopApp) {
     }
 
     if (showCreate) {
-        PlaylistNameDialog("New playlist", "", "Create", { app.createPlaylist(it); showCreate = false }, { showCreate = false })
+        PlaylistNameDialog("New playlist", "", "Create", { app.createPlaylist(it); showCreate = false }, { showCreate = false }, focusNameOnOpen = true)
     }
     renameTarget?.let { p ->
-        PlaylistNameDialog("Rename playlist", p.name, "Rename", { app.renamePlaylist(p.id, it); renameTarget = null }, { renameTarget = null })
+        PlaylistNameDialog("Rename playlist", p.name, "Rename", { app.renamePlaylist(p.id, it); renameTarget = null }, { renameTarget = null }, focusNameOnOpen = true)
     }
     app.playlistTarget?.let { track ->
         PlaylistChooserDialog(
@@ -221,6 +225,7 @@ fun DesktopLibrary(app: DesktopApp) {
             onPick = { app.addToPlaylist(it, track); app.playlistTarget = null },
             onCreate = { app.createPlaylistAndAdd(it, track); app.playlistTarget = null },
             onDismiss = { app.playlistTarget = null },
+            focusNameOnOpen = true,
         )
     }
 }

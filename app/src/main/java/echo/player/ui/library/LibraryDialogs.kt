@@ -28,9 +28,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import echo.player.design.EchoColors
@@ -48,8 +51,11 @@ fun PlaylistChooserDialog(
     onPick: (Long) -> Unit,
     onCreate: (String) -> Unit,
     onDismiss: () -> Unit,
+    focusNameOnOpen: Boolean = false,
 ) {
     var creating by remember { mutableStateOf(false) }
+    val nameFocus = remember { FocusRequester() }
+    LaunchedEffect(creating) { if (creating && focusNameOnOpen) nameFocus.requestFocus() }
     var name by remember { mutableStateOf("") }
     val clean = PlaylistLogic.cleanName(name)
     Dialog(onDismissRequest = onDismiss) {
@@ -66,7 +72,7 @@ fun PlaylistChooserDialog(
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    modifier = Modifier.fillMaxWidth().padding(EchoSpacing.L),
+                    modifier = Modifier.fillMaxWidth().padding(EchoSpacing.L).focusRequester(nameFocus),
                     label = { Text("Playlist name") },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -118,8 +124,11 @@ fun PlaylistNameDialog(
     confirmLabel: String,
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit,
+    focusNameOnOpen: Boolean = false,
 ) {
     var name by remember { mutableStateOf(initialName) }
+    val nameFocus = remember { FocusRequester() }
+    LaunchedEffect(Unit) { if (focusNameOnOpen) nameFocus.requestFocus() }
     val trimmed = name.trim()
     val canConfirm = trimmed.isNotEmpty()
 
@@ -130,7 +139,7 @@ fun PlaylistNameDialog(
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().focusRequester(nameFocus),
                 label = { Text("Playlist name") },
                 singleLine = true,
                 isError = name.isNotEmpty() && !canConfirm,
