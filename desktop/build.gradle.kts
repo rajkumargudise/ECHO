@@ -84,6 +84,8 @@ compose.desktop {
             }
             linux {
                 menuGroup = "Audio"
+                debMaintainer = "info@jarvex.in"
+                appCategory = "AudioVideo"
                 shortcut = true
                 iconFile.set(project.file("packaging/echo.png"))
             }
