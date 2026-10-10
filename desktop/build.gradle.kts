@@ -79,6 +79,7 @@ compose.desktop {
                 menuGroup = "JARVEX"
                 shortcut = true
                 dirChooser = true
+                perUserInstall = true
                 iconFile.set(project.file("packaging/echo.ico"))
                 upgradeUuid = "6f0c7a42-3f1d-4a55-9a7e-5b0e1c9d2e11"
             }
