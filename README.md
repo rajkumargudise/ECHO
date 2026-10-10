@@ -13,6 +13,9 @@ ECHO is a music player for Indian listeners. It plays the music already on your 
 - Android only: swipe between library tabs, swipe the Now Playing display and song name, home-screen widgets
 - Desktop only: keyboard shortcuts (Space play/pause, Ctrl+Right next, Ctrl+Left previous, Esc back, media keys)
 
+## Download
+Installers for Android (APK), Windows (`.exe`, `.msi`) and Linux (`.deb`, `.rpm`, `install.sh`) are on the [Releases page](https://github.com/rajkumargudise/ECHO/releases). Each release has a `SHA256SUMS.txt` to check the files.
+
 ## Desktop (Windows and Linux)
 The desktop app plays MP3, FLAC, OGG, WAV and AAC/M4A, reads tags and cover art, and keeps its data in `%APPDATA%\ECHO` on Windows or `~/.local/share/echo` on Linux.
 

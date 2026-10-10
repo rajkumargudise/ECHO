@@ -1,12 +1,37 @@
-name: ECHO desktop
+name: ECHO release
 
-# Builds ECHO for Windows and Linux. Run it from the Actions tab ("Run workflow"), or push a tag like v1.0.0.
+# Builds ECHO for Android, Windows and Linux.
+#   - Run it by hand from the Actions tab (Run workflow) to get the files as downloadable artifacts.
+#   - Push a tag such as v1.0.0 and it also publishes a GitHub Release with every file attached.
 on:
   workflow_dispatch:
   push:
     tags: ["v*"]
 
+permissions:
+  contents: write
+
 jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Test
+        run: ./gradlew :app:testDebugUnitTest
+      - name: Build the APK
+        run: ./gradlew :app:assembleDebug
+      - name: Name the APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk ECHO-android.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ECHO-android
+          path: ECHO-android.apk
+
   windows:
     runs-on: windows-latest
     steps:
@@ -20,7 +45,7 @@ jobs:
         run: ./gradlew :desktop:test
         shell: bash
       - name: Build installers and the portable app
-        run: ./gradlew :desktop:packageMsi :desktop:packageExe :desktop:createDistributable
+        run: ./gradlew :desktop:packageExe :desktop:packageMsi :desktop:createDistributable
         shell: bash
       - name: Zip the portable app
         run: Compress-Archive -Path desktop/build/compose/binaries/main/app/ECHO -DestinationPath ECHO-windows-portable.zip
@@ -29,8 +54,8 @@ jobs:
         with:
           name: ECHO-windows
           path: |
-            desktop/build/compose/binaries/main/msi/*.msi
             desktop/build/compose/binaries/main/exe/*.exe
+            desktop/build/compose/binaries/main/msi/*.msi
             ECHO-windows-portable.zip
 
   linux:
@@ -57,3 +82,41 @@ jobs:
             desktop/build/compose/binaries/main/deb/*.deb
             desktop/build/compose/binaries/main/rpm/*.rpm
             ECHO-linux-portable.tar.gz
+            desktop/packaging/linux/install.sh
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [android, windows, linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Name the files and write the checksums
+        run: |
+          cd dist
+          find . -mindepth 2 -type f -exec mv -t . {} +   # artifacts keep their build paths; put every file in one folder
+          find . -mindepth 1 -type d -empty -delete
+          v="${GITHUB_REF_NAME#v}"
+          mv ECHO-android.apk "ECHO-${v}-android.apk"
+          mv ECHO-windows-portable.zip "ECHO-${v}-windows-portable.zip"
+          mv ECHO-linux-portable.tar.gz "ECHO-${v}-linux-portable.tar.gz"
+          for f in *.exe; do mv "$f" "ECHO-Setup-${v}-windows.exe"; done
+          for f in *.msi; do mv "$f" "ECHO-${v}-windows.msi"; done
+          chmod +x install.sh
+          sha256sum * > SHA256SUMS.txt
+          ls -la
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: ECHO ${{ github.ref_name }}
+          body: |
+            ECHO music player for Android, Windows and Linux.
+            A product of JARVEX (jarvex.in), info@jarvex.in.
+
+            - Android: `ECHO-*-android.apk`
+            - Windows: `ECHO-Setup-*-windows.exe` (or the `.msi`, or the portable zip)
+            - Linux: the `.deb` (Ubuntu 24.04+, Debian 13+), the `.rpm` (Fedora), or `install.sh` with the `.tar.gz` for any distribution
+
+            Check the downloads with `SHA256SUMS.txt`.
+          files: dist/*
