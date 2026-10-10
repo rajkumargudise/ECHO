@@ -1,0 +1,21 @@
+# Gradle / build output
+.gradle/
+.kotlin/
+build/
+**/build/
+*.apk
+*.aab
+
+# Machine-specific
+local.properties
+*.hprof
+java_pid*.hprof
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ECHO</string>
+    <string name="widget_compact_description">ECHO, small: the current track and play / pause.</string>
+    <string name="widget_player_description">ECHO player: track, previous, play / pause and next.</string>
+    <string name="widget_pulse_description">ECHO Pulse: the ECHO mascot with what is playing.</string>
+    <string name="widget_label_compact">ECHO · Compact</string>
+    <string name="widget_label_player">ECHO · Player</string>
+    <string name="widget_label_pulse">ECHO · Pulse</string>
+    <string name="widget_favorite">Favorite</string>
+</resources>

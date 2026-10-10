@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/widget_bg" android:baselineAligned="false" android:gravity="center_vertical" android:orientation="horizontal" android:padding="8dp">
+    <ImageView android:id="@+id/w_mascot" android:layout_width="36dp" android:layout_height="36dp"
+        android:src="@drawable/ic_launcher_foreground" android:scaleType="fitCenter" android:importantForAccessibility="no"/>
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:orientation="vertical">
+        <TextView android:id="@+id/w_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/w_artist" android:layout_width="match_parent" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:textColor="#BBBBBB" android:textSize="12sp"/>
+        <ProgressBar android:id="@+id/w_progress" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="3dp" android:layout_marginTop="3dp" android:indeterminate="false" android:max="100" android:minHeight="3dp" android:maxHeight="3dp" android:progressDrawable="@drawable/widget_progress"/>
+    </LinearLayout>
+    <ImageView android:id="@+id/w_play" android:layout_width="36dp" android:layout_height="36dp"  android:background="@drawable/widget_key_primary_bg" android:padding="6dp" android:src="@drawable/ic_widget_play"/>
+    <TextView android:id="@+id/w_state" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+    <FrameLayout android:id="@+id/w_open" android:layout_width="0dp" android:layout_height="0dp"/>
+</LinearLayout>

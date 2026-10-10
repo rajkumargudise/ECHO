@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/widget_bg" android:baselineAligned="false" android:gravity="center_vertical" android:orientation="horizontal" android:padding="10dp">
+    <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/widget_field">
+        <ImageView android:id="@+id/w_mascot" android:layout_width="96dp" android:layout_height="96dp" android:layout_gravity="center" android:src="@drawable/ic_launcher_foreground" android:scaleType="fitCenter" android:importantForAccessibility="no"/>
+    </FrameLayout>
+    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginStart="8dp" android:gravity="center_vertical" android:orientation="vertical">
+        <TextView android:id="@+id/w_state" android:layout_width="wrap_content" android:layout_height="wrap_content" android:letterSpacing="0.15" android:textSize="11sp" android:textStyle="bold" android:textColor="#8C8C8C"/>
+        <TextView android:id="@+id/w_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="2" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/w_artist" android:layout_width="match_parent" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:textColor="#BBBBBB" android:textSize="13sp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"
+            android:gravity="center_vertical" android:orientation="horizontal">
+            <Chronometer android:id="@+id/w_elapsed" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:minWidth="30dp" android:textColor="#8C8C8C" android:textSize="11sp"/>
+            <ProgressBar android:id="@+id/w_progress" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp"
+                android:layout_height="3dp" android:layout_weight="1" android:layout_marginStart="6dp" android:layout_marginEnd="6dp"
+                android:indeterminate="false" android:max="100" android:minHeight="3dp" android:maxHeight="3dp"
+                android:progressDrawable="@drawable/widget_progress"/>
+            <TextView android:id="@+id/w_duration" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:textColor="#8C8C8C" android:textSize="11sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <ImageView android:id="@+id/w_prev" android:layout_width="34dp" android:layout_height="34dp"  android:background="@drawable/widget_key_bg" android:padding="6dp" android:src="@drawable/ic_widget_prev"/>
+            <ImageView android:id="@+id/w_play" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginStart="5dp" android:layout_marginEnd="5dp" android:background="@drawable/widget_key_primary_bg" android:padding="8dp" android:src="@drawable/ic_widget_play"/>
+            <ImageView android:id="@+id/w_next" android:layout_width="34dp" android:layout_height="34dp"  android:background="@drawable/widget_key_bg" android:padding="6dp" android:src="@drawable/ic_widget_next"/>
+            <ImageView android:id="@+id/w_fav" android:contentDescription="@string/widget_favorite" android:layout_width="30dp" android:layout_height="30dp" android:layout_marginStart="4dp" android:padding="5dp" android:src="@drawable/ic_widget_heart"/>
+        </LinearLayout>
+    </LinearLayout>
+    <FrameLayout android:id="@+id/w_open" android:layout_width="0dp" android:layout_height="0dp"/>
+</LinearLayout>
